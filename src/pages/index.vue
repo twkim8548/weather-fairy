@@ -1,12 +1,6 @@
 <script setup lang="ts">
 import { Vue3Lottie } from 'vue3-lottie'
-import PartyJson from '/src/assets/json/party.json'
-import {onMounted, ref} from "vue";
-
-const isShow = ref(false);
-onMounted(() => {
-  isShow.value = true;
-})
+import PartyJson from '/src/assets/json/Party.json'
 </script>
 
 <template>
@@ -20,7 +14,7 @@ onMounted(() => {
         class="overflow-hidden"
         @on-complete="$router.replace('/main')"
     />
-    <p class="text-5xl absolute animate-[fade_1s_ease-in-out]" v-if="isShow">
+    <p class="text-5xl absolute animate-[fade_1s_ease-in-out]">
       날씨요정
     </p>
   </div>
