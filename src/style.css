@@ -4,6 +4,7 @@
 
 body {
     font-family: 'HSSanTokki20-Regular', serif;
+    @apply text-slate-800;
 }
 
 @font-face {
