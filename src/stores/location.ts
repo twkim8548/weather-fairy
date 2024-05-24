@@ -15,7 +15,7 @@ export const useLocationStore = defineStore('location', () => {
             },
             null,
             {
-              'Authorization': `KakaoAK a279fdf97bbc18b3ff53bb20d577bf63`
+              'Authorization': `KakaoAK ${import.meta.env.VITE_KAKAO_API_KEY}`
             }
         )
     }

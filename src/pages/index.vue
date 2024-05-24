@@ -14,7 +14,9 @@ import PartyJson from '/src/assets/json/Party.json'
         class="overflow-hidden"
         @on-complete="$router.replace('/main')"
     />
-    <p class="text-5xl absolute animate-[fade_1s_ease-in-out]">
+    <p class="text-4xl absolute animate-[fade_1s_ease-in-out] text-center">
+      출퇴근길
+      <br>
       날씨요정
     </p>
   </div>

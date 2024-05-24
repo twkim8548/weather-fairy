@@ -4,14 +4,17 @@ import {useWeatherStore} from "@/stores/weather.ts";
 import {storeToRefs} from "pinia";
 import {VueDaumPostcode} from "vue-daum-postcode";
 import {useLocationStore} from "@/stores/location.ts";
+import {useRouter} from "vue-router";
 
+const router = useRouter();
 const weatherStore = useWeatherStore();
 const locationStore = useLocationStore();
 const {homeAddress, homePosition, workspaceAddress, workspacePosition} = storeToRefs(locationStore);
-const {startTime, endTime} = storeToRefs(weatherStore);
+const {startTime, endTime, moveTime} = storeToRefs(weatherStore);
 
 const isShowSearchAddressModal = ref(false);
 const selectedType = ref();
+const moveTimeSelectRef = ref();
 
 const onCompletePostCode = ((postCode: any) => {
   isShowSearchAddressModal.value = false;
@@ -40,6 +43,17 @@ const clickSearch = (type: string) => {
   selectedType.value = type;
   isShowSearchAddressModal.value = true;
 }
+
+const clickConfirm = () => {
+  if (!homeAddress.value) {
+    return alert('집 위치를 설정해주세요');
+  }
+  if (!workspaceAddress.value) {
+    return alert('회사 위치를 설정해주세요');
+  }
+
+  router.replace('/');
+}
 onMounted(() => {
 })
 </script>
@@ -48,18 +62,13 @@ onMounted(() => {
   <div class="flex flex-col gap-[30px] px-[30px] py-[30px]">
     <div class="flex flex-col gap-[20px]">
       <div class="flex justify-center items-center relative">
-        <img
-            src="@/assets/icons/ico-back.svg" alt="back"
-            class="absolute cursor-pointer top-[50%] left-0 translate-y-[-50%]"
-            @click="$router.go(-1)"
-        >
         <p class="text-[18px]">
           설정
         </p>
       </div>
     </div>
-    <div class="flex justify-between">
-      <p>
+    <div class="flex justify-between items-center">
+      <p class="text-gray-500 text-[14px]">
         출근시간
       </p>
       <div class="flex">
@@ -93,8 +102,8 @@ onMounted(() => {
         시
       </div>
     </div>
-    <div class="flex justify-between">
-      <p>
+    <div class="flex justify-between items-center">
+      <p class="text-gray-500 text-[14px]">
         퇴근시간
       </p>
       <div class="flex">
@@ -127,12 +136,32 @@ onMounted(() => {
         시
       </div>
     </div>
+    <div class="flex justify-between items-center">
+      <p class="text-gray-500 text-[14px]">
+        이동시간
+      </p>
+      <div class="flex cursor-pointer">
+        <select name="hours" class="bg-transparent appearance-none outline-none" v-model="moveTime"
+                ref="moveTimeSelectRef"
+                @change="weatherStore.setMoveTime(moveTime)">
+          <option :value="1">1</option>
+          <option :value="2">2</option>
+          <option :value="3">3</option>
+          <option :value="4">4</option>
+        </select>
+        <p  @click.stop="() => {moveTimeSelectRef.focus(); moveTimeSelectRef.click()}">
+
+        시간
+        </p>
+      </div>
+    </div>
     <div class="flex flex-col w-full">
-      <div class="flex justify-between">
-        <p>
+      <div class="flex justify-between items-center">
+        <p class="text-gray-500 text-[14px]">
           집 위치
         </p>
-        <button @click="clickSearch('home')">
+        <button @click="clickSearch('home')"
+                class="border rounded-[10px] px-[6px] py-[4px] border-gray-500 text-[14px] shadow">
           검색
         </button>
       </div>
@@ -141,11 +170,12 @@ onMounted(() => {
       </p>
     </div>
     <div class="flex flex-col w-full">
-      <div class="flex justify-between">
-        <p>
+      <div class="flex justify-between items-center">
+        <p class="text-gray-500 text-[14px]">
           회사 위치
         </p>
-        <button @click="clickSearch('workspace')">
+        <button @click="clickSearch('workspace')"
+                class="border rounded-[10px] px-[6px] py-[4px] border-gray-500 text-[14px] shadow">
           검색
         </button>
       </div>
@@ -153,9 +183,17 @@ onMounted(() => {
         {{ workspaceAddress }}
       </p>
     </div>
-    <div class="absolute inset-0 bg-white"
+    <div class="absolute inset-0 bg-white flex flex-col"
          v-if="isShowSearchAddressModal">
       <vue-daum-postcode class="w-full h-full" @complete="onCompletePostCode"/>
+    </div>
+    <div class="self-end flex flex-col">
+      <p class="text-[12px] text-gray-500">
+        날씨 정보 : 기상청 제공
+      </p>
+    </div>
+    <div class="py-[10px] border rounded-[50px] text-center" @click="clickConfirm">
+      확인
     </div>
   </div>
 </template>

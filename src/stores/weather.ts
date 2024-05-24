@@ -9,6 +9,7 @@ export const useWeatherStore = defineStore('weather', () => {
     const workspace = ref();
     const startTime = ref(localStorage?.getItem("startTime") ?? "0900");
     const endTime = ref(localStorage?.getItem("endTime") ?? "1800");
+    const moveTime = ref(localStorage?.getItem("moveTime") ?? 1);
 
     const getVilageFcstHome = (x: number, y: number) => {
         isLoading.value = true;
@@ -28,7 +29,7 @@ export const useWeatherStore = defineStore('weather', () => {
         useApi('GET',
             `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst`,
             {
-                serviceKey: 'nvHb69KDKsiZAdqYRTUQsl+8nFQ9YT1AuxUxg21+3mR19ww/8HAahvY6Bh9x6lsFKrvjbq9sXMMpUHhtrwqdwQ==',
+                serviceKey: import.meta.env.VITE_WEATHER_API_KEY,
                 dataType: 'JSON',
                 numOfRows: 576,
                 pageNo: 1,
@@ -71,7 +72,7 @@ export const useWeatherStore = defineStore('weather', () => {
         useApi('GET',
             `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst`,
             {
-                serviceKey: 'nvHb69KDKsiZAdqYRTUQsl+8nFQ9YT1AuxUxg21+3mR19ww/8HAahvY6Bh9x6lsFKrvjbq9sXMMpUHhtrwqdwQ==',
+                serviceKey: import.meta.env.VITE_WEATHER_API_KEY,
                 dataType: 'JSON',
                 numOfRows: 576,
                 pageNo: 1,
@@ -102,8 +103,13 @@ export const useWeatherStore = defineStore('weather', () => {
     }
 
     const setEndTime = (time:string) => {
-        localStorage.setItem("setEndTime", time);
+        localStorage.setItem("endTime", time);
         endTime.value = time;
+    }
+
+    const setMoveTime = (time:number) => {
+        localStorage.setItem("moveTime", time);
+        moveTime.value = time;
     }
 
     return {
@@ -113,7 +119,9 @@ export const useWeatherStore = defineStore('weather', () => {
         getVilageFcstWorkspace,
         startTime,
         endTime,
+        moveTime,
         setStartTime,
         setEndTime,
+        setMoveTime,
     }
 });
