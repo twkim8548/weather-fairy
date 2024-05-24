@@ -18,7 +18,7 @@ export default defineConfig({
             manifest: {
                 short_name: '날요',
                 name: "날요 - 출퇴근길 날씨요정",
-                start_url: "/",
+                start_url: "/weather-fairy/",
                 background_color: "#ffffff",
                 theme_color: "#1E293B",
                 display: "standalone",
