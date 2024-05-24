@@ -42,12 +42,12 @@ jobs:
           node-version: 18
           cache: 'pnpm'
       - name: .env setting
+        env:
+            VITE_WEATHER_API_KEY: ${{ secrets.VITE_WEATHER_API_KEY }}
+            VITE_KAKAO_API_KEY: ${{ secrets.VITE_KAKAO_API_KEY }}
         run: |
-          echo "VITE_WEATHER_API_KEY=${{ secrets.VITE_WEATHER_API_KEY }}" >> .env
-          echo "VITE_KAKAO_API_KEY=${{ secrets.VITE_KAKAO_API_KEY }}" >> .env
-          cat .env
-          pwd
-          ll
+          echo "VITE_WEATHER_API_KEY=${VITE_WEATHER_API_KEY}" >> .env
+          echo "VITE_KAKAO_API_KEY=${VITE_KAKAO_API_KEY}" >> .env
       - run: pnpm install
       - run: pnpm run build
         env:
