@@ -5,6 +5,7 @@ import {storeToRefs} from "pinia";
 import {VueDaumPostcode} from "vue-daum-postcode";
 import {useLocationStore} from "@/stores/location.ts";
 import {useRouter} from "vue-router";
+import {useModalStore} from "@/stores/modal.ts";
 
 const router = useRouter();
 const weatherStore = useWeatherStore();
@@ -192,8 +193,13 @@ onMounted(() => {
         날씨 정보 : 기상청 제공
       </p>
     </div>
-    <div class="py-[10px] border rounded-[50px] text-center" @click="clickConfirm">
-      확인
+    <div class="flex flex-col gap-[10px]">
+      <div class="cursor-pointer shadow py-[10px] border rounded-[50px] text-center" @click="useModalStore().isShowAppDownloadModal = true">
+        앱 다운로드
+      </div>
+      <div class="cursor-pointer shadow bg-blue-50 py-[10px] border rounded-[50px] text-center" @click="clickConfirm">
+        확인
+      </div>
     </div>
   </div>
 </template>
