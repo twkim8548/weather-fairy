@@ -28,6 +28,7 @@ export default defineConfig({
                         src: "/android-chrome-192x192.png",
                         type: "image/png",
                         sizes: "192x192",
+                        purpose: "any"
                     },
                     {
                         src: "/android-chrome-192x192.png",
@@ -39,6 +40,7 @@ export default defineConfig({
                         src: "/android-chrome-512x512.png",
                         type: "image/png",
                         sizes: "512x512",
+                        purpose: "any"
                     },
                     {
                         src: "/android-chrome-512x512.png",
