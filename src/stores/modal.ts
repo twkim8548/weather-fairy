@@ -2,15 +2,17 @@ import {defineStore} from "pinia";
 import {ref} from "vue";
 
 export const useModalStore = defineStore('modal', () => {
-    const isShowAppDownloadModal = ref((localStorage?.getItem('isAllowAppDownloadModal') ?? 'false') === 'true');
+    const isAllowAppDownloadModal = ref((localStorage?.getItem('isAllowAppDownloadModal') ?? 'true') === 'true');
+    const isShowAppDownloadModal = ref(false);
 
-    const setIsShowAppDownloadModal = (val: boolean) => {
+    const setIsAllowAppDownloadModal = (val: boolean) => {
         localStorage.setItem('isAllowAppDownloadModal', String(val));
-        isShowAppDownloadModal.value = val;
+        isAllowAppDownloadModal.value = val;
     }
 
     return {
+        isAllowAppDownloadModal,
         isShowAppDownloadModal,
-        setIsShowAppDownloadModal
+        setIsAllowAppDownloadModal
     }
 });

@@ -6,26 +6,33 @@ import {onMounted, onUnmounted} from "vue";
 const isDeviceIOS = /iPad|iPhone|iPod/.test(window.navigator.userAgent);
 
 const modalStore = useModalStore();
-const { isShowAppDownloadModal } = storeToRefs(modalStore);
+const { isAllowAppDownloadModal, isShowAppDownloadModal } = storeToRefs(modalStore);
 
 let deferredPrompt: any;
 
 const deferredPromptEvent = (e: any) => {
-  e.preventDefault();
-  modalStore.setModalState(true);
-  deferredPrompt = e;
+  if (isAllowAppDownloadModal.value) {
+    e.preventDefault();
+    isShowAppDownloadModal.value = true;
+    deferredPrompt = e;
+  }
 }
 
 const installApp =() => {
   if (!deferredPrompt) {
     return;
   }
-  modalStore.setIsShowAppDownloadModal(false);
+  modalStore.isShowAppDownloadModal = false;
+  modalStore.setIsAllowAppDownloadModal(false);
   deferredPrompt.prompt();
 }
 
 onMounted(() => {
   window.addEventListener("beforeinstallprompt", deferredPromptEvent);
+
+  if (isDeviceIOS && isAllowAppDownloadModal.value) {
+    isShowAppDownloadModal.value = true;
+  }
 })
 
 onUnmounted(() => {
@@ -40,7 +47,7 @@ onUnmounted(() => {
       <div
           v-if="$route.name !== '/' && isShowAppDownloadModal"
           class="fixed bottom-0 w-full max-w-[800px] bg-white border-t rounded-t-[20px] min-h-[200px] drop-shadow-2xl p-[20px] flex flex-col">
-        <button class="w-fit self-end" @click="modalStore.setIsShowAppDownloadModal(false)">
+        <button class="w-fit self-end" @click="() => {modalStore.setIsAllowAppDownloadModal(false); isShowAppDownloadModal = false}">
           닫기 X
         </button>
         <div class="flex flex-col gap-[20px]">
