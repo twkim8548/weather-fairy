@@ -27,7 +27,7 @@ export const useWeatherStore = defineStore('weather', () => {
         }
 
         useApi('GET',
-            `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst`,
+            `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst`,
             {
                 serviceKey: import.meta.env.VITE_WEATHER_API_KEY,
                 dataType: 'JSON',
@@ -70,7 +70,7 @@ export const useWeatherStore = defineStore('weather', () => {
         }
 
         useApi('GET',
-            `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst`,
+            `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst`,
             {
                 serviceKey: import.meta.env.VITE_WEATHER_API_KEY,
                 dataType: 'JSON',
