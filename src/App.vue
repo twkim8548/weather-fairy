@@ -12,6 +12,7 @@ let deferredPrompt: any;
 
 const deferredPromptEvent = (e: any) => {
   e.preventDefault();
+  modalStore.setModalState(true);
   deferredPrompt = e;
 }
 

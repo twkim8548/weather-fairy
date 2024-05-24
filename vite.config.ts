@@ -25,25 +25,25 @@ export default defineConfig({
                 description: "우산을 챙길까 말까, 출퇴근길 날씨가 어떤지 궁금하지 않으신가요? 우리집, 회사의 날씨를 빠르고 정확하게 알아보세요.",
                 icons: [
                     {
-                        src: "/android-chrome-192x192.png",
+                        src: "/weather_fairy/android-chrome-192x192.png",
                         type: "image/png",
                         sizes: "192x192",
                         purpose: "any"
                     },
                     {
-                        src: "/android-chrome-192x192.png",
+                        src: "/weather_fairy/android-chrome-192x192.png",
                         type: "image/png",
                         sizes: "192x192",
                         purpose: "maskable",
                     },
                     {
-                        src: "/android-chrome-512x512.png",
+                        src: "/weather_fairy/android-chrome-512x512.png",
                         type: "image/png",
                         sizes: "512x512",
                         purpose: "any"
                     },
                     {
-                        src: "/android-chrome-512x512.png",
+                        src: "/weather_fairy/android-chrome-512x512.png",
                         type: "image/png",
                         sizes: "512x512",
                         purpose: "maskable",
