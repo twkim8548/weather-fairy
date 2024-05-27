@@ -4,18 +4,39 @@ import {useApi} from "../composables/api.ts";
 
 export const useLocationStore = defineStore('location', () => {
     const homeAddress = ref(localStorage.getItem("homeAddress"));
-    const homePosition = ref({lat:localStorage.getItem("homePositionLat"), lng:localStorage.getItem("homePositionLng")});
+    const homePosition = ref({
+        lat: localStorage.getItem("homePositionLat"),
+        lng: localStorage.getItem("homePositionLng")
+    });
     const workspaceAddress = ref(localStorage.getItem("workspaceAddress"));
-    const workspacePosition = ref({lat:localStorage.getItem("workspacePositionLat"), lng:localStorage.getItem("workspacePositionLng")});
+    const workspacePosition = ref({
+        lat: localStorage.getItem("workspacePositionLat"),
+        lng: localStorage.getItem("workspacePositionLng")
+    });
 
     const getAddressToLocation = (address: string) => {
         return useApi('GET', 'https://dapi.kakao.com/v2/local/search/address.json',
             {
-              "query": address
+                "query": address
             },
             null,
             {
-              'Authorization': `KakaoAK ${import.meta.env.VITE_KAKAO_API_KEY}`
+                'Authorization': `KakaoAK ${import.meta.env.VITE_KAKAO_API_KEY}`
+            }
+        )
+    }
+
+    const getWGS84toTM = async (lat: number, lng: number) => {
+        return await useApi('GET', 'https://dapi.kakao.com/v2/local/geo/transcoord.json',
+            {
+                "x": lng,
+                "y": lat,
+                "input_coord": 'WGS84',
+                "output_coord": 'TM',
+            },
+            null,
+            {
+                'Authorization': `KakaoAK ${import.meta.env.VITE_KAKAO_API_KEY}`
             }
         )
     }
@@ -41,6 +62,7 @@ export const useLocationStore = defineStore('location', () => {
         workspaceAddress,
         workspacePosition,
         getAddressToLocation,
+        getWGS84toTM,
         setHome,
         setWorkspace,
     }

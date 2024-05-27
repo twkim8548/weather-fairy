@@ -8,11 +8,15 @@ import {useGetRainyText, useGetWeather, useGetWeatherJson, useGetWindyText} from
 import dayjs from "dayjs";
 import LoadingJson from '@/assets/json/Loading.json'
 import {useLocationStore} from "@/stores/location.ts";
+import {useApi} from "@/composables/api.ts";
+import {useFineDustStore} from "@/stores/fineDust.ts";
 
 const weatherStore = useWeatherStore();
 const locationStore = useLocationStore();
+const fineDustStore = useFineDustStore();
 const {home, workspace, startTime, endTime, moveTime} = storeToRefs(weatherStore);
 const {homePosition, workspacePosition, homeAddress, workspaceAddress} = storeToRefs(locationStore);
+const {fineDust} = storeToRefs(fineDustStore);
 
 const today = dayjs();
 const selectedDate = ref('today');
@@ -25,11 +29,14 @@ const homeDate = computed(() => {
       time: startTime.value
     };
   } else {
-    let time = parseInt(endTime.value) + parseInt(`${moveTime.value}00`);
+    let time: number | string = parseInt(endTime.value) + parseInt(`${moveTime.value}00`);
     let day = date.value;
     if (time >= 2400) {
       day += dayjs(date.value).add(1, 'day').format('YYYYMMDD');
       time -= 2400;
+    }
+    if (time.toString().length <= 3) {
+      time = `0${time}`;
     }
     return {
       day: day,
@@ -44,11 +51,14 @@ const workspaceDate = computed(() => {
       time: endTime.value
     };
   } else {
-    let time = parseInt(startTime.value) + parseInt(`${moveTime.value}00`);
+    let time: number | string = parseInt(startTime.value) + parseInt(`${moveTime.value}00`);
     let day = date.value;
     if (time >= 2400) {
       day += dayjs(date.value).add(1, 'day').format('YYYYMMDD');
       time -= 2400;
+    }
+    if (time.toString().length <= 3) {
+      time = `0${time}`;
     }
     return {
       day: day,
@@ -69,15 +79,19 @@ const isPass = computed(() => {
     return false
   }
 });
+const pm10Dust = computed(() => fineDust.value?.[date.value]['PM10']);
+const pm25Dust = computed(() => fineDust.value?.[date.value]['PM10']);
+const o3Dust = computed(() => fineDust.value?.[date.value]['O3']);
 
 
-onMounted(() => {
+onMounted(async () => {
   if (homeAddress.value) {
     getHomeWeather();
   }
   if (workspaceAddress.value) {
     getWorkSpaceWeather();
   }
+  fineDustStore.getFineDust();
 
   selectedDate.value = today < dayjs(`${today.format('YYYYMMDD')}${endTime.value}`) ? 'today' : 'tomorrow';
   selectedType.value = selectedDate.value === 'tomorrow' ? 'goto' : (today < dayjs(`${today.format('YYYYMMDD')}${startTime.value}`) ? 'goto' : 'leave');
@@ -98,7 +112,7 @@ const getWorkSpaceWeather = () => {
   <div class="flex flex-col gap-[30px] px-[30px] py-[30px]">
     <div class="flex flex-col gap-[20px]">
       <div class="flex justify-between items-center">
-        <p class="text-[18px]"
+        <p class="text-[18px] font-[HSSanTokki20-Regular]"
            @click="$router.go(0)"
         >
           출퇴근길 날씨요정 🧚
@@ -159,7 +173,7 @@ const getWorkSpaceWeather = () => {
       </div>
     </div>
     <div v-if="!homeAddress || !workspaceAddress"
-      class="flex flex-col items-center gap-[10px]">
+         class="flex flex-col items-center gap-[10px]">
       <p class="text-[20px] text-center ">
         집/회사 설정을 먼저 해주세요
       </p>
@@ -179,7 +193,7 @@ const getWorkSpaceWeather = () => {
       >
         <div class="flex flex-col gap-[10px] items-center">
           <p class="text-gray-500 text-[18px]">
-            {{ `집 : ${homeDate.time.substring(0, 2)}시`}}
+            {{ `집 : ${homeDate.time.substring(0, 2)}시` }}
           </p>
           <div class="flex flex-col items-center">
             <div class="flex gap-[10px] items-center">
@@ -209,7 +223,7 @@ const getWorkSpaceWeather = () => {
         <div class="w-full h-[1px] bg-gray-100"/>
         <div class="flex flex-col gap-[10px] items-center">
           <p class="text-gray-500 text-[18px]">
-            {{ `회사 : ${workspaceDate.time.substring(0, 2)}시`}}
+            {{ `회사 : ${workspaceDate.time.substring(0, 2)}시` }}
           </p>
           <div class="flex flex-col items-center">
             <div class="flex gap-[10px] items-center">
@@ -249,6 +263,37 @@ const getWorkSpaceWeather = () => {
             :loop="true"
         />
         날씨 확인중...
+      </div>
+      <div v-if="fineDust" class="flex flex-col gap-[10px]">
+        <div class="flex flex-col gap-[3px]"
+          v-if="pm10Dust">
+          <p class="font-bold text-[12px]">
+            미세먼지 : {{pm10Dust?.dataTime}}
+          </p>
+          <p class="text-[13px] text-black">
+            {{ pm10Dust?.informCause }}
+          </p>
+        </div>
+        <div class="flex flex-col gap-[3px]"
+             v-if="pm25Dust"
+        >
+          <p class="font-bold text-[12px]">
+            초미세먼지 : {{pm25Dust?.dataTime}}
+          </p>
+          <p class="text-[13px] text-black">
+            {{ pm25Dust?.informCause?.replaceAll('미세먼지', '초미세먼지') }}
+          </p>
+        </div>
+        <div class="flex flex-col gap-[3px]"
+             v-if="o3Dust"
+        >
+          <p class="font-bold text-[12px]">
+            오존: {{o3Dust?.dataTime}}
+          </p>
+          <p class="text-[13px] text-black">
+            {{ o3Dust?.informCause }}
+          </p>
+        </div>
       </div>
     </template>
     <div v-else

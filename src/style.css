@@ -1,9 +1,11 @@
+@import url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-    font-family: 'HSSanTokki20-Regular', serif;
+    font-family: 'NanumSquareRound';
     @apply text-slate-800;
 }
 

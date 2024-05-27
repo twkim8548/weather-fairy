@@ -188,9 +188,16 @@ onMounted(() => {
          v-if="isShowSearchAddressModal">
       <vue-daum-postcode class="w-full h-full" @complete="onCompletePostCode"/>
     </div>
-    <div class="self-end flex flex-col">
+    <div class="self-end flex flex-col text-end">
       <p class="text-[12px] text-gray-500">
         날씨 정보 : 기상청 제공
+      </p>
+      <p class="text-[12px] text-gray-500">
+        미세먼지 정보 : 에어코리아 제공
+      </p>
+      <p class="text-[10px] text-gray-300">
+        * 데이터는 실시간 관측된 자료이며 측정소 현지 사정이나 <br>
+        데이터의 수신상태에 따라 미수신 될 수 있음
       </p>
     </div>
     <div class="flex flex-col gap-[10px]">
