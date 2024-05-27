@@ -7,7 +7,7 @@ export const useFineDustStore = defineStore('fineDust', () => {
     const fineDust = ref();
 
     const getStation = (tmX:number, tmY: number) => {
-        return useApi('GET', 'http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList',
+        return useApi('GET', 'https://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList',
             {
                 tmX: tmX,
                 tmY: tmY,
@@ -19,7 +19,7 @@ export const useFineDustStore = defineStore('fineDust', () => {
     }
 
     const getFineDust = () => {
-        useApi('GET', 'http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth',
+        useApi('GET', 'https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth',
             {
                 serviceKey: import.meta.env.VITE_WEATHER_API_KEY,
                 returnType: 'json',
