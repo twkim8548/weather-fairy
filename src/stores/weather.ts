@@ -40,7 +40,7 @@ export const useWeatherStore = defineStore('weather', () => {
             }
         ).then((res: any) => {
             home.value = {};
-            res?.data?.response?.body?.items?.item?.forEach(item => {
+            res?.data?.response?.body?.items?.item?.forEach((item: any) => {
                 if (!home.value[item.fcstDate]) {
                     home.value[item.fcstDate] = {};
                 }
@@ -83,7 +83,7 @@ export const useWeatherStore = defineStore('weather', () => {
             }
         ).then((res: any) => {
             workspace.value = {};
-            res?.data?.response?.body?.items?.item?.forEach(item => {
+            res?.data?.response?.body?.items?.item?.forEach((item: any) => {
                 if (!workspace.value[item.fcstDate]) {
                     workspace.value[item.fcstDate] = {};
                 }
@@ -107,8 +107,8 @@ export const useWeatherStore = defineStore('weather', () => {
         endTime.value = time;
     }
 
-    const setMoveTime = (time:number) => {
-        localStorage.setItem("moveTime", time);
+    const setMoveTime = (time: number) => {
+        localStorage.setItem("moveTime", `${time}`);
         moveTime.value = time;
     }
 
